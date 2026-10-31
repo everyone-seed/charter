@@ -46,6 +46,8 @@ class TestHits(unittest.TestCase):
         ("g/箱", 0),
         ("箱を足す", 1),
         ("部品の箱", 1),
+        ("ゴミ箱に移す", 0),
+        ("ゴミ箱の箱を足す", 1),
     ]
 
     def test_hits(self):
