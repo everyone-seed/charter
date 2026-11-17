@@ -74,5 +74,24 @@ class TestWordCount(unittest.TestCase):
         self.assertEqual(out.count("    pattern: \"/"), 17)
 
 
+class TestEnvNames(unittest.TestCase):
+    """作業用のコピー環境（→開発環境）とコピー環境（→検証環境）が重ねて当たらない（かんばん20261117-1037）。"""
+
+    ENV = ("製品の言葉.md",
+           "## やめる言い方\n\n作業用のコピー環境（→開発環境）／コピー環境（→検証環境）\n")
+    CASES = [
+        ("作業用のコピー環境を開く", 1),
+        ("コピー環境を開く", 1),
+        ("検証環境を開く", 0),
+        ("開発環境を開く", 0),
+    ]
+
+    def test_env_hits(self):
+        rules = kotoba_prh.build_rules(kotoba_prh.read_files() + [self.ENV])
+        for text, n in self.CASES:
+            with self.subTest(text=text):
+                self.assertEqual(_hits(text, rules), n)
+
+
 if __name__ == "__main__":
     unittest.main()
